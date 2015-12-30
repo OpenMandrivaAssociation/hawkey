@@ -34,8 +34,9 @@ BuildRequires:	pkgconfig(check)
 BuildRequires:	valgrind
 %endif
 
-# We cannot prevent provides from nonstandard paths for now, since rpm adds Requires if we do:
-# %%define __noautoprovfiles %{python2_sitearch}/.*\\.so\\|%{python3_sitearch}/.*\\.so\\|%{python2_sitearch}/hawkey/test/.*\\.so\\|%{python3_sitearch}/hawkey/test/.*\\.so
+# We prevent provides/requires from nonstandard paths:
+%define __noautoprovfiles %{python2_sitearch}/.*\\.so\\|%{python3_sitearch}/.*\\.so
+%define __noautoreqfiles %{python2_sitearch}/hawkey/test/.*\\.so\\|%{python3_sitearch}/hawkey/test/.*\\.so
 
 %description
 A Library providing simplified C and Python API to libsolv.
