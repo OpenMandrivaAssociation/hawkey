@@ -14,7 +14,7 @@
 %define origrel 1
 
 Name:		hawkey
-Version:	0.6.2
+Version:	0.6.3
 Release:	1
 Summary:	Library providing simplified C and Python API to libsolv
 Group:		System/Libraries
