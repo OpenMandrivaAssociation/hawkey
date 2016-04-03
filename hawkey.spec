@@ -63,12 +63,9 @@ Development files for %{name}.
 %package -n python2-hawkey
 Summary:	Python 2 bindings for the hawkey library
 Group:		Development/Python
-BuildRequires:	python2-devel
+BuildRequires:	pkgconfig(python2)
 BuildRequires:	python2-nose
 BuildRequires:	python2-sphinx
-%if %{without python3}
-Provides:	python-%{name} = %{version}-%{release}
-%endif
 Requires:	%{libname}%{?_isa} = %{version}-%{release}
 
 %description -n python2-hawkey
@@ -78,8 +75,8 @@ Python 2 bindings for the hawkey library.
 %package -n python-hawkey
 Summary:	Python 3 bindings for the hawkey library
 Group:		Development/Python
-Provides:	python3-%{name} = %{version}-%{release}
-BuildRequires:	python-devel
+Provides:	python-%{name} = %{version}-%{release}
+BuildRequires:	pkgconfig(python3)
 BuildRequires:	python-nose
 BuildRequires:	python-sphinx
 Requires:	%{libname}%{?_isa} = %{version}-%{release}
@@ -151,6 +148,5 @@ popd
 
 %if %{with python3}
 %files -n python-hawkey
-%{python3_sitearch}/hawkey
+%{python_sitearch}/hawkey
 %endif
-
