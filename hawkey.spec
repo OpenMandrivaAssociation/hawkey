@@ -24,6 +24,9 @@ Source0:	https://github.com/rpm-software-management/%{name}/archive/%{name}-%{ve
 
 BuildRequires:	solv-devel >= %{libsolv_version}
 BuildRequires:	cmake
+%ifarch %{ix86}
+BuildRequires:	gcc
+%endif
 BuildRequires:	pkgconfig(expat)
 BuildRequires:	pkgconfig(rpm)
 BuildRequires:	pkgconfig(zlib)
@@ -87,6 +90,10 @@ Python 3 bindings for the hawkey library.
 
 %prep
 %setup -q -n %{name}-%{name}-%{version}-%{origrel}
+%ifarch %{ix86}
+export CC=gcc
+export CXX=g++
+%endif
 
 %if %{with python3}
 rm -rf py3
