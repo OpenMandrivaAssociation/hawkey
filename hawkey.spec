@@ -26,6 +26,7 @@ BuildRequires:	solv-devel >= %{libsolv_version}
 BuildRequires:	cmake
 %ifarch %{ix86}
 BuildRequires:	gcc
+BuildRequires:	gcc-c++
 %endif
 BuildRequires:	pkgconfig(expat)
 BuildRequires:	pkgconfig(rpm)
