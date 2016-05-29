@@ -1,0 +1,44 @@
+From e086eca685a38d9fb3b8c1a3b2706bf0d2af8875 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa13@gmail.com>
+Date: Tue, 24 May 2016 08:52:11 -0400
+Subject: [PATCH 2/2] tests/sack: do not raise exceptions on empty/unknown
+ arches
+
+libsolv 0.6.21 now permits handling custom architectures,
+which completely breaks these tests.
+---
+ tests/python/tests/test_sack.py | 2 --
+ tests/test_sack.c               | 4 ----
+ 2 files changed, 6 deletions(-)
+
+diff --git a/tests/python/tests/test_sack.py b/tests/python/tests/test_sack.py
+index 6661caa..cb0449c 100644
+--- a/tests/python/tests/test_sack.py
++++ b/tests/python/tests/test_sack.py
+@@ -55,8 +55,6 @@ class BasicTest(unittest.TestCase):
+     def test_creation(self):
+         hawkey.Sack(arch="noarch")
+         hawkey.Sack(arch="x86_64")
+-        self.assertRaises(hawkey.ArchException, hawkey.Sack, arch="")
+-        self.assertRaises(hawkey.ValueException, hawkey.Sack, arch="play")
+ 
+     def test_deepcopy(self):
+         sack = hawkey.Sack()
+diff --git a/tests/test_sack.c b/tests/test_sack.c
+index 9c97f4e..a179d2d 100644
+--- a/tests/test_sack.c
++++ b/tests/test_sack.c
+@@ -55,10 +55,6 @@ START_TEST(test_sack_create)
+     fail_if(sack_pool(sack) == NULL, NULL);
+     hy_sack_free(sack);
+ 
+-    sack = hy_sack_create(test_globals.tmpdir, "", NULL, NULL,
+-			  HY_MAKE_CACHE_DIR);
+-    fail_unless(sack == NULL);
+-    fail_unless(hy_get_errno() == HY_E_ARCH);
+ }
+ END_TEST
+ 
+-- 
+2.6.3
+

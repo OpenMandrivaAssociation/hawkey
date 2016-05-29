@@ -1,0 +1,37 @@
+From dc3b7e79198f99c58b385a496bb6ae2e73113990 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenko@redhat.com>
+Date: Tue, 17 May 2016 17:05:17 +0200
+Subject: [PATCH 1/2] sack: don't raise error when non-existing arch is used
+
+Reference: https://github.com/rpm-software-management/libhif/commit/611a86afaa47ce2c84207a602d167eb851a4d19a
+Signed-off-by: Igor Gnatenko <ignatenko@redhat.com>
+---
+ src/sack.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/sack.c b/src/sack.c
+index 5bcdb39..e77c5eb 100644
+--- a/src/sack.c
++++ b/src/sack.c
+@@ -165,6 +165,9 @@ setarch(HySack sack, const char *req_arch)
+ 
+     HY_LOG_INFO("Architecture is: %s", arch);
+     pool_setarch(pool, arch);
++    /* Since one of commits after 0.6.20 libsolv allowes custom arches
++     * which means it will be 'newcoolarch' ad 'noarch' always. */
++#if LIBSOLV_VERSION <= 620
+     if (!strcmp(arch, "noarch"))
+ 	// noarch never fails
+ 	goto done;
+@@ -178,7 +181,7 @@ setarch(HySack sack, const char *req_arch)
+ 	    count++;
+     if (count < 2)
+ 	ret = HY_E_FAILED;
+-
++#endif
+  done:
+     solv_free(detected);
+     return ret;
+-- 
+2.6.3
+

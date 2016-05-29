@@ -1,5 +1,5 @@
 # libsolv minimum version
-%global libsolv_version 0.6.14-1
+%global libsolv_version 0.6.21-1
 
 %bcond_without python3
 
@@ -15,12 +15,19 @@
 
 Name:		hawkey
 Version:	0.6.3
-Release:	1
+Release:	2
 Summary:	Library providing simplified C and Python API to libsolv
 Group:		System/Libraries
 License:	LGPLv2+
 URL:		https://github.com/rpm-software-management/%{name}
 Source0:	https://github.com/rpm-software-management/%{name}/archive/%{name}-%{version}-%{origrel}.tar.gz
+
+# Upstream patches
+Patch0:		0001-sack-don-t-raise-error-when-non-existing-arch-is-use.patch
+Patch1:		0002-tests-sack-do-not-raise-exceptions-on-empty-unknown-.patch
+
+# Patches from Mageia
+Patch1000:	hawkey-0.6.3-Enable-URPM-style-solution-reordering.patch
 
 BuildRequires:	solv-devel >= %{libsolv_version}
 BuildRequires:	cmake
@@ -91,6 +98,7 @@ Python 3 bindings for the hawkey library.
 
 %prep
 %setup -q -n %{name}-%{name}-%{version}-%{origrel}
+%apply_patches
 %ifarch %{ix86}
 export CC=gcc
 export CXX=g++
