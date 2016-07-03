@@ -15,7 +15,7 @@
 
 Name:		hawkey
 Version:	0.6.3
-Release:	2
+Release:	3
 Summary:	Library providing simplified C and Python API to libsolv
 Group:		System/Libraries
 License:	LGPLv2+
@@ -86,7 +86,7 @@ Python 2 bindings for the hawkey library.
 %package -n python-hawkey
 Summary:	Python 3 bindings for the hawkey library
 Group:		Development/Python
-Provides:	python-%{name} = %{version}-%{release}
+Provides:	python3-%{name} = %{version}-%{release}
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	python-nose
 BuildRequires:	python-sphinx
@@ -99,10 +99,6 @@ Python 3 bindings for the hawkey library.
 %prep
 %setup -q -n %{name}-%{name}-%{version}-%{origrel}
 %apply_patches
-%ifarch %{ix86}
-export CC=gcc
-export CXX=g++
-%endif
 
 %if %{with python3}
 rm -rf py3
@@ -110,6 +106,12 @@ mkdir py3
 %endif
 
 %build
+# Clang doesn't work with this on x86_32
+%ifarch %{ix86}
+export CC=gcc
+export CXX=g++
+%endif
+
 %cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo
 %make
 make doc-man
