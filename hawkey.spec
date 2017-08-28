@@ -13,7 +13,7 @@
 
 Name:		hawkey
 Version:	0.6.4
-Release:	1
+Release:	2
 Summary:	Library providing simplified C and Python API to libsolv
 Group:		System/Libraries
 License:	LGPLv2+
@@ -106,12 +106,12 @@ export CC=gcc
 export CXX=g++
 %endif
 
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_DESIRED:str=3
+%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_SOLV_URPMREORDER=1 -DPYTHON_DESIRED:str=3
 %make
 make doc-man
 
 pushd ../py2
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_DESIRED:str=2 -DPYTHON_EXECUTABLE:str="python2" -DENABLE_DOCUMENTATION=0 ../../
+%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_SOLV_URPMREORDER=1 -DPYTHON_DESIRED:str=2 -DPYTHON_EXECUTABLE:str="python2" -DENABLE_DOCUMENTATION=0 ../../
 %make
 popd
 
