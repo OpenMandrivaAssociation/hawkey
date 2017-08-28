@@ -1,8 +1,6 @@
 # libsolv minimum version
 %global libsolv_version 0.6.21-1
 
-%bcond_without python3
-
 # The C API and valgrind tests currently fail,
 # while the Python tests pass. FIX AND ENABLE ASAP!
 %bcond_with tests
@@ -14,20 +12,14 @@
 %define origrel 1
 
 Name:		hawkey
-Version:	0.6.3
-Release:	3
+Version:	0.6.4
+Release:	1
 Summary:	Library providing simplified C and Python API to libsolv
 Group:		System/Libraries
 License:	LGPLv2+
 URL:		https://github.com/rpm-software-management/%{name}
 Source0:	https://github.com/rpm-software-management/%{name}/archive/%{name}-%{version}-%{origrel}.tar.gz
 
-# Upstream patches
-Patch0:		0001-sack-don-t-raise-error-when-non-existing-arch-is-use.patch
-Patch1:		0002-tests-sack-do-not-raise-exceptions-on-empty-unknown-.patch
-
-# Patches from Mageia
-Patch1000:	hawkey-0.6.3-Enable-URPM-style-solution-reordering.patch
 
 BuildRequires:	solv-devel >= %{libsolv_version}
 BuildRequires:	cmake
@@ -57,6 +49,7 @@ A Library providing simplified C and Python API to libsolv.
 Summary:	Libraries for %{name}
 Group:		System/Libraries
 Requires:	%{_lib}solv0%{?_isa} >= %{libsolv_version}
+Requires:	%{_lib}solvext0%{?_isa} >= %{libsolv_version}
 
 %description -n %{libname}
 Libraries for %{name}
@@ -82,7 +75,6 @@ Requires:	%{libname}%{?_isa} = %{version}-%{release}
 %description -n python2-hawkey
 Python 2 bindings for the hawkey library.
 
-%if %{with python3}
 %package -n python-hawkey
 Summary:	Python 3 bindings for the hawkey library
 Group:		Development/Python
@@ -94,16 +86,13 @@ Requires:	%{libname}%{?_isa} = %{version}-%{release}
 
 %description -n python-hawkey
 Python 3 bindings for the hawkey library.
-%endif
 
 %prep
 %setup -q -n %{name}-%{name}-%{version}-%{origrel}
 %apply_patches
 
-%if %{with python3}
-rm -rf py3
-mkdir py3
-%endif
+rm -rf py2
+mkdir py2
 
 %build
 # Clang doesn't work with this on x86_32
@@ -116,13 +105,11 @@ export CXX=g++
 %make
 make doc-man
 
-%if %{with python3}
-pushd ../py3
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_DESIRED:str=3 ../../
+pushd ../py2
+%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_DESIRED:str=2 -DPYTHON_EXECUTABLE:str="python2" ../../
 %make
 make doc-man
 popd
-%endif
 
 %if %{with tests}
 %check
@@ -132,24 +119,23 @@ export LD_LIBRARY_PATH=%{_libdir}:%{buildroot}%{_libdir}
 pushd ./build
 make ARGS="-V" test
 popd
-%if %{with python3}
+
 # Run just the Python tests, not all of them, since
 # we have coverage of the core from the first build
-pushd ./py3/build/tests/python
+pushd ./py2/build/tests/python
 make ARGS="-V" test
 popd
-%endif
 %endif
 
 %install
 pushd ./build
 %makeinstall_std
 popd
-%if %{with python3}
-pushd ./py3/build
+
+pushd ./py2/build
 %makeinstall_std
 popd
-%endif
+
 
 %files -n %{libname}
 %doc COPYING README.rst
@@ -164,7 +150,5 @@ popd
 %files -n python2-hawkey
 %{python2_sitearch}/hawkey
 
-%if %{with python3}
 %files -n python-hawkey
 %{python_sitearch}/hawkey
-%endif
