@@ -68,7 +68,9 @@ Development files for %{name}.
 Summary:	Python 2 bindings for the hawkey library
 Group:		Development/Python
 BuildRequires:	pkgconfig(python2)
+%if %{with tests}
 BuildRequires:	python2-nose
+%endif
 BuildRequires:	python2-sphinx
 Requires:	%{libname}%{?_isa} = %{version}-%{release}
 
@@ -80,7 +82,9 @@ Summary:	Python 3 bindings for the hawkey library
 Group:		Development/Python
 Provides:	python3-%{name} = %{version}-%{release}
 BuildRequires:	pkgconfig(python3)
+%if %{with tests}
 BuildRequires:	python-nose
+%endif
 BuildRequires:	python-sphinx
 Requires:	%{libname}%{?_isa} = %{version}-%{release}
 
