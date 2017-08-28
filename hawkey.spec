@@ -106,7 +106,7 @@ export CC=gcc
 export CXX=g++
 %endif
 
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo
+%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_DESIRED:str=3
 %make
 make doc-man
 
