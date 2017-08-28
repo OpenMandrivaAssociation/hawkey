@@ -20,6 +20,8 @@ License:	LGPLv2+
 URL:		https://github.com/rpm-software-management/%{name}
 Source0:	https://github.com/rpm-software-management/%{name}/archive/%{name}-%{version}-%{origrel}.tar.gz
 
+# Patches from Mageia
+Patch0500:      hawkey-0.6.3-CMake-Add-option-for-docs.patch
 
 BuildRequires:	solv-devel >= %{libsolv_version}
 BuildRequires:	cmake
@@ -71,7 +73,6 @@ BuildRequires:	pkgconfig(python2)
 %if %{with tests}
 BuildRequires:	python2-nose
 %endif
-BuildRequires:	python2-sphinx
 Requires:	%{libname}%{?_isa} = %{version}-%{release}
 
 %description -n python2-hawkey
@@ -110,9 +111,8 @@ export CXX=g++
 make doc-man
 
 pushd ../py2
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_DESIRED:str=2 -DPYTHON_EXECUTABLE:str="python2" ../../
+%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_DESIRED:str=2 -DPYTHON_EXECUTABLE:str="python2" -DENABLE_DOCUMENTATION=0 ../../
 %make
-make doc-man
 popd
 
 %if %{with tests}
