@@ -94,7 +94,7 @@ Python 3 bindings for the hawkey library.
 
 %prep
 %setup -q -n %{name}-%{name}-%{version}-%{origrel}
-%apply_patches
+%autopatch -p1
 
 rm -rf py2
 mkdir py2
